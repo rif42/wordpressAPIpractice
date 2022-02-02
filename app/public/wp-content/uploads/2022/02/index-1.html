@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <head>
+        <Title>HTML Editor</Title>
+    </head>
+
+    <div class="lightbar"> </div>
+
+    <br>
+
+    <h1 align="center">Welcome to HTML Editor</h1>
+    <h2 id=subtitle align="center">Publish content to your WordPress site in just one-click</h2><br>
+    <h2 align="center">Add New Post to Wordpress below</h2>
+
+    <body>
+        <br>
+
+        <textarea placeholder="Type your post title" class="articletitle"></textarea>
+
+        <br><br>
+
+        <textarea class="tinymce"></textarea>
+
+        <script type="text/javascript" src="plugin/tinymce/jquery.tinymce.min.js"></script>
+        <script type="text/javascript" src="plugin/tinymce/tinymce.min.js"></script>
+        <script type="text/javascript" src="plugin/tinymce/init.tinymce.js"></script>
+
+        <br>
+
+        <button type="button" class="btn btn-primary" id="addbtn">Publish</button>
+
+    </body>
+
+    <script>
+        var addbtn = document.getElementById("addbtn");
+        if (addbtn)
+        {
+            addbtn.addEventListener("click", function(){
+                var textcontent = tinymce.activeEditor.getContent({ format:"text" });
+                var postdata = 
+                {
+                    "title" : document.getElementsByClassName("articletitle")[0].value,
+                    "content" : textcontent,
+                    "status" : "publish"
+                }
+                var createPost = new XMLHttpRequest();
+                createPost.open("POST","http://test.local/wp-json/wp/v2/posts");
+                createPost.setRequestHeader("X-WP-Nonce", "d8b9b8b8b8");
+                createPost.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                createPost.send(postdata);
+                console.log (JSON.stringify(postdata));
+            })
+        }
+    </script>
+
+    <style>
+        .lightbar{
+            height: 75px;
+            width: 100%;
+            background-color: aqua;
+        }
+
+        .articletitle{
+            width: 50% ; 
+            line-height: 20px;
+            margin-left:25% ; 
+            margin-right:25% ; 
+            padding: 5px;
+            border-radius: 10px;
+            overflow:hidden;
+            vertical-align: middle;
+        }
+
+        .tox{
+            border-radius: 10px;
+            margin-left: 25%;
+            margin-right: 25%;
+        }
+
+        h1{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight:500;
+        }
+
+        #subtitle{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight:normal;
+        }
+
+        h2{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .btn{
+            position: relative;
+            left: 45%;
+            right: 45%;
+        }
+    </style>
+</html>
+
+
+<!-- fetch('http://test.local/wp-json').then(function(response) {
+    return response.json();
+}).then(function(myJson) {
+    console.log(JSON.stringify(myJson));
+}); -->
